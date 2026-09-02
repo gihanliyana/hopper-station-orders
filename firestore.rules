@@ -10,13 +10,18 @@ service cloud.firestore {
       allow read: if true;
 
       // A customer joining the queue may only create a fresh, valid
-      // "queued" order with the required fields.
+      // "queued" order with the required fields, including the required
+      // side (spice level) and hopper type (diet) choices.
       allow create: if
-        request.resource.data.keys().hasAll(['token', 'name', 'phone', 'status', 'createdAt']) &&
+        request.resource.data.keys().hasAll(
+          ['token', 'name', 'phone', 'status', 'createdAt', 'spiceLevel', 'diet']
+        ) &&
         request.resource.data.status == 'queued' &&
-        request.resource.data.token is string && request.resource.data.token.size() > 0 &&
+        request.resource.data.token is int &&
         request.resource.data.name is string && request.resource.data.name.size() > 0 &&
-        request.resource.data.phone is string && request.resource.data.phone.size() >= 7;
+        request.resource.data.phone is string && request.resource.data.phone.size() >= 7 &&
+        request.resource.data.spiceLevel in ['spicy', 'mild'] &&
+        request.resource.data.diet in ['vegetarian', 'egg'];
 
       // Only status + status-timestamp fields may ever be changed after
       // creation, and only into a recognised status value. This app has no
@@ -29,6 +34,16 @@ service cloud.firestore {
         request.resource.data.status in ['queued', 'accepted', 'preparing', 'done', 'completed'];
 
       allow delete: if false;
+    }
+
+    // Single shared counter doc used to auto-generate sequential token
+    // numbers (read via a transaction, then incremented by 1).
+    match /meta/tokenCounter {
+      allow read: if true;
+      allow write: if
+        request.resource.data.keys().hasOnly(['value']) &&
+        request.resource.data.value is int &&
+        request.resource.data.value > 0;
     }
   }
 }

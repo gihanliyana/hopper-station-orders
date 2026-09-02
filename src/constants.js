@@ -18,3 +18,23 @@ export const STATUS_LABELS = {
   [STATUS.DONE]: 'Ready for pickup',
   [STATUS.COMPLETED]: 'Picked up',
 };
+
+export const SPICE_LEVEL = {
+  SPICY: 'spicy',
+  MILD: 'mild',
+};
+
+export const SPICE_LABELS = {
+  [SPICE_LEVEL.SPICY]: 'Spicy — Lunu miris',
+  [SPICE_LEVEL.MILD]: 'Mild — Seeni sambol',
+};
+
+export const DIET = {
+  VEGETARIAN: 'vegetarian',
+  EGG: 'egg',
+};
+
+export const DIET_LABELS = {
+  [DIET.VEGETARIAN]: 'Vegetarian',
+  [DIET.EGG]: 'Egg',
+};

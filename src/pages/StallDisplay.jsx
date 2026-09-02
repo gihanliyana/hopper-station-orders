@@ -64,21 +64,21 @@ export default function StallDisplay() {
         <Column title="Orders accepted" count={accepted.length} accent="bg-turmeric/15" height="420px">
           {accepted.length === 0 && <EmptyNote text="No accepted orders yet" />}
           {accepted.map((o) => (
-            <OrderTicket key={o.id} order={o} />
+            <OrderTicket key={o.id} order={o} showDetails={false} />
           ))}
         </Column>
 
         <Column title="Preparing" count={preparing.length} accent="bg-clay/15" height="660px">
           {preparing.length === 0 && <EmptyNote text="Kitchen is waiting on the next ticket" />}
           {preparing.map((o) => (
-            <OrderTicket key={o.id} order={o} />
+            <OrderTicket key={o.id} order={o} showDetails={false} />
           ))}
         </Column>
 
         <Column title="Ready for pickup" count={done.length} accent="bg-curry/15" height="420px">
           {done.length === 0 && <EmptyNote text="Nothing ready yet" />}
           {done.map((o) => (
-            <OrderTicket key={o.id} order={o} />
+            <OrderTicket key={o.id} order={o} showDetails={false} />
           ))}
         </Column>
       </div>

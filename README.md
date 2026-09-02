@@ -56,9 +56,11 @@ Each order document in the `orders` collection looks like:
 
 ```js
 {
-  token: "42",
+  token: 42,                 // auto-generated, sequential — see below
   name: "Nimal",
   phone: "0771234567",
+  spiceLevel: "mild",        // "spicy" (Lunu miris) or "mild" (Seeni sambol)
+  diet: "egg",                // "egg" or "vegetarian"
   status: "preparing",
   createdAt: Timestamp,
   acceptedAt: Timestamp,
@@ -67,6 +69,22 @@ Each order document in the `orders` collection looks like:
   completedAt: Timestamp | null,
 }
 ```
+
+Phone number, spice level, and diet are only ever shown to staff (`/admin`,
+`/handover`) — the public stall display (`/display`) only ever shows a
+token number and a name.
+
+### Auto-generated tokens
+
+There's no manual token field on `/` any more. Instead, a single counter
+document at `meta/tokenCounter` (`{ value: <number> }`) is incremented
+inside a Firestore transaction each time someone joins the queue, so every
+customer gets a unique, sequential number even if two people submit at
+the exact same moment. This collection is covered by its own rule in
+`firestore.rules` — if you're pasting rules manually into the Firebase
+console rather than deploying via CLI, make sure you re-paste the full,
+current `firestore.rules` (it now includes both the `orders` and
+`meta/tokenCounter` rules) and click **Publish** again.
 
 ## 1. Set up Firebase
 
